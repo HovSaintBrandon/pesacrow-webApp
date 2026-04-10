@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 import 'home_page.dart';
 
 class SplashPage extends StatefulWidget {
@@ -27,22 +28,23 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/splashlogo.png',
+              'assets/mpesacrowlogo.png', // Using the main logo for consistent branding
               width: 250,
               fit: BoxFit.contain,
+              color: Colors.white,
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 48),
             const SizedBox(
-              width: 200,
+              width: 250,
               child: LinearProgressIndicator(
-                backgroundColor: Color(0xFFE6FAF8),
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0D9488)),
+                backgroundColor: Colors.white10,
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.cyan),
               ),
             ),
           ],
