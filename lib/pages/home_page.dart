@@ -26,6 +26,11 @@ class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
   double _appBarOpacity = 0;
 
+  final GlobalKey _heroKey = GlobalKey();
+  final GlobalKey _howItWorksKey = GlobalKey();
+  final GlobalKey _featuresKey = GlobalKey();
+  final GlobalKey _pricingKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -63,17 +68,17 @@ class _HomePageState extends State<HomePage> {
               controller: _scrollController,
               slivers: [
                 SliverList(
-                  delegate: SliverChildListDelegate(const [
-                    HeroSection(),
-                    WhySection(),
-                    HowItWorksSection(),
-                    FeaturesSection(),
-                    AudienceSection(),
-                    TestimonialsSection(),
-                    PricingSection(),
-                    SecuritySection(),
-                    FinalCTASection(),
-                    FooterSection(),
+                  delegate: SliverChildListDelegate([
+                    HeroSection(key: _heroKey),
+                    const WhySection(),
+                    HowItWorksSection(key: _howItWorksKey),
+                    FeaturesSection(key: _featuresKey),
+                    const AudienceSection(),
+                    const TestimonialsSection(),
+                    PricingSection(key: _pricingKey),
+                    const SecuritySection(),
+                    const FinalCTASection(),
+                    FooterSection(onLogoTap: () => _scrollToSection(_heroKey)),
                   ]),
                 ),
               ],
@@ -101,19 +106,29 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Row(
         children: [
-          Image.asset(
-            'assets/mpesacrowlogo.png',
-            height: 32,
-            color: Colors.white,
-            fit: BoxFit.contain,
+          GestureDetector(
+            onTap: () => _scrollToSection(_heroKey),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/mpesacrowlogo.png',
+                    height: 32,
+                    color: Colors.white,
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(width: 12),
+                  const GradientText('PesaCrow', fontSize: 20, fontWeight: FontWeight.w800),
+                ],
+              ),
+            ),
           ),
-          const SizedBox(width: 12),
-          const GradientText('PesaCrow', fontSize: 20, fontWeight: FontWeight.w800),
           const Spacer(),
           if (isWide) ...[
-            _navBtn('Products'),
-            _navBtn('How It Works'),
-            _navBtn('Pricing'),
+            _navBtn('Features', _featuresKey),
+            _navBtn('How It Works', _howItWorksKey),
+            _navBtn('Pricing', _pricingKey),
             const SizedBox(width: 16),
             Animate(
               onPlay: (controller) => controller.repeat(reverse: true),
@@ -136,8 +151,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _navBtn(String label) => TextButton(
-        onPressed: () {},
+  Widget _navBtn(String label, GlobalKey key) => TextButton(
+        onPressed: () => _scrollToSection(key),
         child: Text(
           label,
           style: const TextStyle(
@@ -147,4 +162,15 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       );
+
+  void _scrollToSection(GlobalKey key) {
+    final context = key.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeInOutCubic,
+      );
+    }
+  }
 }

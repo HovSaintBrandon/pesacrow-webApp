@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../theme/app_colors.dart';
+import '../pages/faq_page.dart';
+import '../pages/terms_page.dart';
+import '../pages/privacy_page.dart';
 
 class FooterSection extends StatelessWidget {
-  const FooterSection({super.key});
+  final VoidCallback? onLogoTap;
+  const FooterSection({super.key, this.onLogoTap});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,7 @@ class FooterSection extends StatelessWidget {
                     ),
                     ...columns.entries.map((col) {
                       return Expanded(
-                        child: _buildFooterColumn(col.key, col.value),
+                        child: _buildFooterColumn(context, col.key, col.value),
                       );
                     }),
                   ],
@@ -50,7 +54,7 @@ class FooterSection extends StatelessWidget {
                     children: columns.entries.map((col) {
                       return SizedBox(
                         width: 140,
-                        child: _buildFooterColumn(col.key, col.value),
+                        child: _buildFooterColumn(context, col.key, col.value),
                       );
                     }).toList(),
                   ),
@@ -71,25 +75,31 @@ class FooterSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/mpesacrowlogo.png',
-              height: 32,
-              color: Colors.white,
+        GestureDetector(
+          onTap: onLogoTap,
+          child: MouseRegion(
+            cursor: onLogoTap != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/mpesacrowlogo.png',
+                  height: 32,
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 12),
+                const Text(
+                  'PesaCrow',
+                  style: TextStyle(
+                    color: Colors.white, 
+                    fontWeight: FontWeight.w900, 
+                    fontSize: 22,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 12),
-            const Text(
-              'PesaCrow',
-              style: TextStyle(
-                color: Colors.white, 
-                fontWeight: FontWeight.w900, 
-                fontSize: 22,
-                letterSpacing: -0.5,
-              ),
-            ),
-          ],
+          ),
         ),
         const SizedBox(height: 16),
         Text(
@@ -113,7 +123,7 @@ class FooterSection extends StatelessWidget {
     );
   }
 
-  Widget _buildFooterColumn(String title, List<String> links) {
+  Widget _buildFooterColumn(BuildContext context, String title, List<String> links) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -128,19 +138,51 @@ class FooterSection extends StatelessWidget {
         const SizedBox(height: 20),
         ...links.map((link) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Text(
-                  link,
-                  style: TextStyle(
-                    color: AppColors.textSecondary, 
-                    fontSize: 14,
+              child: InkWell(
+                onTap: () => _handleLinkClick(context, link),
+                borderRadius: BorderRadius.circular(4),
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Text(
+                    link,
+                    style: const TextStyle(
+                      color: AppColors.textSecondary, 
+                      fontSize: 14,
+                    ),
                   ),
                 ),
               ),
             )),
       ],
     );
+  }
+
+  void _handleLinkClick(BuildContext context, String link) {
+    if (link == 'FAQ') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const FAQPage()),
+      );
+    } else if (link == 'Terms of Service') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const TermsPage()),
+      );
+    } else if (link == 'Privacy Policy') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const PrivacyPage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('"$link" page coming soon!'),
+          duration: const Duration(seconds: 2),
+          backgroundColor: AppColors.surface,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   Widget _buildBottomBar() {
