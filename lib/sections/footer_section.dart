@@ -105,6 +105,16 @@ class FooterSection extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 24),
+                  Text(
+                    'The most secure digital escrow for M-Pesa.',
+                    style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 12),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'support@pesacrow.top\n+254 7XX XXX XXX',
+                    style: TextStyle(color: Colors.white.withOpacity(0.35), fontSize: 11),
+                  ),
+                  const SizedBox(height: 24),
                   Wrap(
                     spacing: 32,
                     runSpacing: 24,
