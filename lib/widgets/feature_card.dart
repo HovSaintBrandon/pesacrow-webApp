@@ -5,51 +5,54 @@ class FeatureCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String desc;
-  final Color iconBg;
-  final Color iconColor;
+  final Color? iconColor;
 
   const FeatureCard({
     super.key,
     required this.icon,
     required this.title,
     required this.desc,
-    this.iconBg = const Color(0xFFE6FAF8),
-    this.iconColor = AppColors.teal,
+    this.iconColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final activeIconColor = iconColor ?? AppColors.cyan;
+    
     return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.cardBorder),
-      ),
+      padding: const EdgeInsets.all(24),
+      decoration: AppColors.cyberCard(radius: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Cyber Icon Container
           Container(
-            height: 44,
-            width: 44,
+            height: 48,
+            width: 48,
             decoration: BoxDecoration(
-              color: iconBg,
+              color: activeIconColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: activeIconColor.withOpacity(0.2)),
             ),
-            child: Icon(icon, color: iconColor, size: 22),
+            child: Icon(icon, color: activeIconColor, size: 24),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 20),
           Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+            style: const TextStyle(
+              fontWeight: FontWeight.w800, 
+              fontSize: 18,
+              color: Colors.white,
+              letterSpacing: -0.5,
+            ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 10),
           Text(
             desc,
             style: const TextStyle(
-              color: AppColors.muted,
-              fontSize: 13,
-              height: 1.5,
+              color: AppColors.textSecondary,
+              fontSize: 14,
+              height: 1.6,
             ),
           ),
         ],

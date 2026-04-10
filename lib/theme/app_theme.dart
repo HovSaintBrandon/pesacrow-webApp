@@ -5,21 +5,21 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       fontFamily: 'Inter',
-      scaffoldBackgroundColor: AppColors.bg,
+      scaffoldBackgroundColor: AppColors.background,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.buyerGreen,
-        primary: AppColors.buyerGreen,
-        secondary: AppColors.sellerBlue,
+        seedColor: AppColors.electricBlue,
+        primary: AppColors.cyan,
+        secondary: AppColors.electricBlue,
         surface: AppColors.surface,
-        onSurface: AppColors.dark,
+        onSurface: Colors.white,
         error: AppColors.error,
-        onPrimary: Colors.white,
+        onPrimary: Colors.black,
         onSecondary: Colors.white,
       ),
       textTheme: const TextTheme(
-        displayLarge: TextStyle(color: AppColors.dark, fontWeight: FontWeight.w800),
-        bodyLarge: TextStyle(color: AppColors.dark),
-        bodyMedium: TextStyle(color: AppColors.muted),
+        displayLarge: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w900),
+        bodyLarge: TextStyle(color: AppColors.textPrimary),
+        bodyMedium: TextStyle(color: AppColors.textSecondary),
       ),
       useMaterial3: true,
       cardTheme: CardThemeData(
@@ -27,7 +27,7 @@ class AppTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.cardBorder),
+          side: BorderSide(color: Colors.white.withOpacity(0.1)),
         ),
       ),
     );

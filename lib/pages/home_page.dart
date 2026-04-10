@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../theme/app_colors.dart';
 import '../widgets/gradient_text.dart';
 import '../widgets/primary_button.dart';
@@ -13,72 +15,124 @@ import '../sections/security_section.dart';
 import '../sections/final_cta_section.dart';
 import '../sections/footer_section.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final ScrollController _scrollController = ScrollController();
+  double _appBarOpacity = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    double offset = _scrollController.offset;
+    double opacity = (offset / 100).clamp(0.0, 1.0);
+    if (opacity != _appBarOpacity) {
+      setState(() {
+        _appBarOpacity = opacity;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: CustomScrollView(
-        slivers: [
-          _buildAppBar(context),
-          SliverList(
-            delegate: SliverChildListDelegate(const [
-              HeroSection(),
-              WhySection(),
-              HowItWorksSection(),
-              FeaturesSection(),
-              AudienceSection(),
-              TestimonialsSection(),
-              PricingSection(),
-              SecuritySection(),
-              FinalCTASection(),
-              FooterSection(),
-            ]),
-          ),
-        ],
+    return Theme(
+      data: ThemeData(
+        brightness: Brightness.dark,
+        textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
+      ),
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        body: Stack(
+          children: [
+            CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                SliverList(
+                  delegate: SliverChildListDelegate(const [
+                    HeroSection(),
+                    WhySection(),
+                    HowItWorksSection(),
+                    FeaturesSection(),
+                    AudienceSection(),
+                    TestimonialsSection(),
+                    PricingSection(),
+                    SecuritySection(),
+                    FinalCTASection(),
+                    FooterSection(),
+                  ]),
+                ),
+              ],
+            ),
+            _buildStickyAppBar(context),
+          ],
+        ),
       ),
     );
   }
 
-  SliverAppBar _buildAppBar(BuildContext context) {
+  Widget _buildStickyAppBar(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 600;
-    return SliverAppBar(
-      pinned: true,
-      backgroundColor: Colors.white.withOpacity(0.9),
-      surfaceTintColor: Colors.transparent,
-      elevation: 0,
-      title: Row(
+    return Container(
+      height: 70,
+      decoration: BoxDecoration(
+        color: AppColors.background.withOpacity(_appBarOpacity * 0.9),
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.white.withOpacity(_appBarOpacity * 0.1),
+            width: 1,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Row(
         children: [
           Image.asset(
             'assets/mpesacrowlogo.png',
             height: 32,
+            color: Colors.white,
             fit: BoxFit.contain,
           ),
           const SizedBox(width: 12),
           const GradientText('PesaCrow', fontSize: 20, fontWeight: FontWeight.w800),
+          const Spacer(),
+          if (isWide) ...[
+            _navBtn('Products'),
+            _navBtn('How It Works'),
+            _navBtn('Pricing'),
+            const SizedBox(width: 16),
+            Animate(
+              onPlay: (controller) => controller.repeat(reverse: true),
+              effects: [
+                ScaleEffect(begin: const Offset(1, 1), end: const Offset(1.05, 1.05), duration: 2.seconds, curve: Curves.easeInOut),
+              ],
+              child: PrimaryButton(
+                label: 'Join PesaCrow Free', 
+                onTap: () {},
+              ),
+            ),
+          ] else ...[
+            IconButton(
+              icon: const Icon(Icons.menu, color: Colors.white),
+              onPressed: () {}, // Drawer or mobile menu
+            ),
+          ],
         ],
       ),
-      actions: isWide
-          ? [
-              _navBtn('Products'),
-              _navBtn('How It Works'),
-              _navBtn('Pricing'),
-              const SizedBox(width: 8),
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: PrimaryButton(label: 'Join PesaCrow Free', onTap: () {}),
-              ),
-            ]
-          : [
-              Builder(
-                builder: (ctx) => IconButton(
-                  icon: const Icon(Icons.menu, color: AppColors.dark),
-                  onPressed: () => Scaffold.of(ctx).openEndDrawer(),
-                ),
-              ),
-            ],
     );
   }
 
@@ -86,7 +140,11 @@ class HomePage extends StatelessWidget {
         onPressed: () {},
         child: Text(
           label,
-          style: const TextStyle(color: AppColors.muted, fontSize: 13, fontWeight: FontWeight.w500),
+          style: const TextStyle(
+            color: Colors.white70, 
+            fontSize: 14, 
+            fontWeight: FontWeight.w500,
+          ),
         ),
       );
 }

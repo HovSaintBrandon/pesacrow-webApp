@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../theme/app_colors.dart';
 import '../widgets/feature_card.dart';
 import '../widgets/section_title.dart';
@@ -35,8 +36,8 @@ class _FeaturesSectionState extends State<FeaturesSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.bg,
-      padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 20),
+      color: AppColors.background,
+      padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 20),
       child: Column(
         children: [
           const SectionTitle(
@@ -44,59 +45,82 @@ class _FeaturesSectionState extends State<FeaturesSection> {
             gradient: 'Everyone',
             subtitle: "Whether you're a buyer, seller, business, or developer—PesaCrow has you covered.",
           ),
-          // Tab bar
-          Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: AppColors.cardBorder),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(3, (i) {
-                final selected = _tab == i;
-                return GestureDetector(
-                  onTap: () => setState(() => _tab = i),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: selected ? AppColors.gradientBox(radius: 20) : null,
-                    child: Text(
-                      _tabs[i],
-                      style: TextStyle(
-                        color: selected ? Colors.white : AppColors.muted,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ),
-          ),
-          const SizedBox(height: 24),
+          
+          // Custom Tab Bar
+          _buildTabBar(),
+          
+          const SizedBox(height: 48),
+          
           LayoutBuilder(
             builder: (context, constraints) {
-              final crossCount = constraints.maxWidth > 700 ? 3 : 1;
+              final isWide = constraints.maxWidth > 900;
+              final crossCount = isWide ? 3 : 1;
+              
               return GridView.count(
+                key: ValueKey(_tab), // Key triggers animation on tab switch
                 crossAxisCount: crossCount,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: crossCount == 1 ? 3.0 : 1.1,
+                mainAxisSpacing: 24,
+                crossAxisSpacing: 24,
+                childAspectRatio: crossCount == 1 ? 1.4 : 1.1,
                 children: _data[_tab].map((f) {
                   return FeatureCard(
                     icon: f['icon'] as IconData,
                     title: f['title'] as String,
                     desc: f['desc'] as String,
                   );
-                }).toList(),
+                }).toList()
+                .animate(interval: 100.ms)
+                .fadeIn(duration: 400.ms)
+                .slideY(begin: 0.1, end: 0),
               );
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTabBar() {
+    return Container(
+      padding: const EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(3, (i) {
+          final selected = _tab == i;
+          return GestureDetector(
+            onTap: () => setState(() => _tab = i),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              decoration: BoxDecoration(
+                color: selected ? AppColors.cyan : Colors.transparent,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: selected ? [
+                  BoxShadow(
+                    color: AppColors.cyan.withOpacity(0.3),
+                    blurRadius: 10,
+                  )
+                ] : null,
+              ),
+              child: Text(
+                _tabs[i],
+                style: TextStyle(
+                  color: selected ? Colors.white : AppColors.textSecondary,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          );
+        }),
       ),
     );
   }

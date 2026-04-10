@@ -1,39 +1,62 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Primary Action Colors (Role-Based)
-  static const Color buyerGreen = Color(0xFF2E9D5B);
-  static const Color sellerBlue = Color(0xFF3182CE);
+  // Brand Colors (Bitnob-inspired)
+  static const Color background = Color(0xFF0A0A0A);
+  static const Color surface = Color(0xFF111827);
+  static const Color surfaceLight = Color(0xFF1F2937);
+  
+  // Accent Palette
+  static const Color cyan = Color(0xFF00B4FF);
+  static const Color electricBlue = Color(0xFF3B82F6);
+  static const Color success = Color(0xFF22C55E);
+  static const Color orange = Color(0xFFF59E0B);
+  static const Color accentGold = Color(0xFFFFD700);
   
   // Semantic Colors
-  static const Color success = Color(0xFF2E9D5B); // Same as Buyer Green
-  static const Color warning = Color(0xFFD69E2E); // Pending Payment (Amber)
-  static const Color error = Color(0xFFE53E3E);   // Error/Disputed (Red)
-  static const Color info = Color(0xFF3182CE);    // Funds Held (Blue)
-  static const Color muted = Color(0xFF757575);   // Secondary Text
+  static const Color error = Color(0xFFEF4444);
+  static const Color warning = Color(0xFFFBBF24);
+  static const Color info = Color(0xFF3B82F6);
+  
+  // Text Colors
+  static const Color textPrimary = Colors.white;
+  static const Color textSecondary = Color(0xFF9CA3AF);
+  static const Color textMuted = Color(0xFF6B7280);
 
-  // Neutral & Surface Palette
-  static const Color bg = Color(0xFFF7F9F7);      // Scaffold Background
-  static const Color surface = Colors.white;      // Surface White
-  static const Color dark = Color(0xFF1A1A1A);     // Primary Text
-  static const Color cardBorder = Color(0xFFE5E7EB);
-
-  // Accent Tints
-  static const Color buyerTint = Color(0xFFE8F5EE);
-
-  // Legacy mappings for compatibility
-  static const Color teal = buyerGreen;
-  static const Color purple = sellerBlue;
+  // Legacy mappings (Keep some for compatibility temporarily if needed)
+  static const Color buyerGreen = success;
+  static const Color sellerBlue = electricBlue;
+  static const Color dark = background;
+  static const Color muted = textSecondary;
 
   // Gradient helpers
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [buyerGreen, sellerBlue],
+    colors: [cyan, electricBlue],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
-  static BoxDecoration gradientBox({double radius = 16}) => BoxDecoration(
+  static const LinearGradient goldGradient = LinearGradient(
+    colors: [orange, accentGold],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static BoxDecoration gradientBox({double radius = 12}) => BoxDecoration(
     gradient: primaryGradient,
     borderRadius: BorderRadius.circular(radius),
+    boxShadow: [
+      BoxShadow(
+        color: cyan.withOpacity(0.3),
+        blurRadius: 10,
+        offset: const Offset(0, 4),
+      ),
+    ],
+  );
+
+  static BoxDecoration cyberCard({double radius = 16}) => BoxDecoration(
+    color: surface.withOpacity(0.6),
+    borderRadius: BorderRadius.circular(radius),
+    border: Border.all(color: Colors.white.withOpacity(0.1)),
   );
 }

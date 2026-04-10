@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../theme/app_colors.dart';
 import '../widgets/section_title.dart';
 
@@ -26,47 +27,76 @@ class TestimonialsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.bg,
-      padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 20),
+      color: AppColors.background,
+      padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 20),
       child: Column(
         children: [
-          const SectionTitle(prefix: 'What Our ', gradient: 'Users Say'),
+          const SectionTitle(
+            prefix: 'What Our ', 
+            gradient: 'Users Say',
+            subtitle: 'Real stories from real users securing their trade in Kenya.',
+          ),
           LayoutBuilder(
             builder: (ctx, c) {
-              final crossCount = c.maxWidth > 700 ? 3 : 1;
+              final crossCount = c.maxWidth > 900 ? 3 : 1;
               return GridView.count(
                 crossAxisCount: crossCount,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: crossCount == 1 ? 2.8 : 0.85,
+                mainAxisSpacing: 24,
+                crossAxisSpacing: 24,
+                childAspectRatio: crossCount == 1 ? 1.4 : 0.85,
                 children: _items.map((t) {
                   return Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.cardBorder),
-                    ),
+                    padding: const EdgeInsets.all(32),
+                    decoration: AppColors.cyberCard(radius: 24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.format_quote, color: AppColors.teal.withOpacity(0.3), size: 32),
-                        const SizedBox(height: 12),
+                        Icon(Icons.format_quote, color: AppColors.cyan.withOpacity(0.3), size: 40),
+                        const SizedBox(height: 16),
                         Expanded(
                           child: Text(
                             '"${t['quote']}"',
-                            style: const TextStyle(color: AppColors.muted, fontSize: 13, height: 1.6),
+                            style: const TextStyle(
+                              color: AppColors.textSecondary, 
+                              fontSize: 15, 
+                              height: 1.6,
+                              fontStyle: FontStyle.italic,
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        Text(t['name']!, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-                        Text(t['loc']!, style: const TextStyle(color: AppColors.muted, fontSize: 11)),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: AppColors.surfaceLight,
+                              radius: 20,
+                              child: Text(t['name']![0], style: const TextStyle(color: AppColors.cyan, fontWeight: FontWeight.bold)),
+                            ),
+                            const SizedBox(width: 12),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  t['name']!, 
+                                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Colors.white),
+                                ),
+                                Text(
+                                  t['loc']!, 
+                                  style: const TextStyle(color: AppColors.textMuted, fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   );
-                }).toList(),
+                }).toList()
+                .animate(interval: 150.ms)
+                .fadeIn(duration: 600.ms)
+                .slideX(begin: 0.1, end: 0),
               );
             },
           ),

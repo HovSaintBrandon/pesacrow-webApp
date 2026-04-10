@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../theme/app_colors.dart';
 import '../widgets/gradient_text.dart';
 import '../widgets/primary_button.dart';
@@ -8,185 +9,338 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
-    final isWide = w > 700;
+    final size = MediaQuery.of(context).size;
+    final isWide = size.width > 900;
+    final heroHeight = size.height * 0.9;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: isWide ? 48 : 20, vertical: 40),
-      child: isWide
-          ? Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(child: _heroText()),
-                const SizedBox(width: 40),
-                _phoneMockup(),
-              ],
-            )
-          : Column(children: [_heroText(), const SizedBox(height: 32), _phoneMockup()]),
-    );
-  }
-
-  Widget _heroText() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.buyerTint,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: const Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.check_circle, size: 16, color: AppColors.buyerGreen),
-              SizedBox(width: 6),
-              Text(
-                'Licensed & Regulated Digital Escrow',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.buyerGreen),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 20),
-        const Text(
-          'Trusting them so',
-          style: TextStyle(fontSize: 36, fontWeight: FontWeight.w800, color: AppColors.dark, height: 1.15),
-        ),
-        const GradientText("you don't have to.", fontSize: 36),
-        const SizedBox(height: 16),
-        const Text(
-          'The most secure digital escrow for M-Pesa. Protect your payments, secure your sales, and trade with confidence—anywhere in Kenya.',
-          style: TextStyle(fontSize: 15, color: AppColors.muted, height: 1.6),
-        ),
-        const SizedBox(height: 24),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: [
-            PrimaryButton(label: 'Join PesaCrow Free', icon: Icons.arrow_forward, onTap: () {}),
-            OutlinedButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.download, size: 18),
-              label: const Text('Download App'),
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                side: const BorderSide(color: AppColors.cardBorder),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 32),
-        // Stats
-        Row(
-          children: [
-            _stat(Icons.trending_up, 'KSh 10M+', 'Secured'),
-            const SizedBox(width: 24),
-            _stat(Icons.people, '5,000+', 'Deals'),
-            const SizedBox(width: 24),
-            _stat(Icons.shield, '99%', 'Success'),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _stat(IconData icon, String value, String label) {
-    return Column(
-      children: [
-        Icon(icon, color: AppColors.buyerGreen, size: 20),
-        const SizedBox(height: 4),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 20)),
-        Text(label, style: const TextStyle(color: AppColors.muted, fontSize: 11)),
-      ],
-    );
-  }
-
-  Widget _phoneMockup() {
-    return Container(
-      width: 260,
-      height: 500,
+      width: double.infinity,
+      height: heroHeight,
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F4F6),
-        borderRadius: BorderRadius.circular(36),
-        border: Border.all(color: AppColors.cardBorder, width: 3),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 40,
-            offset: const Offset(0, 16),
-          )
+        gradient: RadialGradient(
+          center: const Alignment(0.8, -0.6),
+          radius: 1.2,
+          colors: [
+            AppColors.cyan.withOpacity(0.08),
+            AppColors.background,
+          ],
+        ),
+      ),
+      child: Stack(
+        children: [
+          // Background Abstract Elements
+          _buildBackgroundDecor(),
+          
+          Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 1200),
+              padding: EdgeInsets.symmetric(horizontal: isWide ? 60 : 24),
+              child: isWide 
+                ? Row(
+                    children: [
+                      Expanded(flex: 3, child: _heroContent(context)),
+                      Expanded(flex: 2, child: _heroVisual()),
+                    ],
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _heroContent(context, isCenter: true),
+                      const SizedBox(height: 48),
+                      _heroVisual(),
+                    ],
+                  ),
+            ),
+          ),
         ],
       ),
-      padding: const EdgeInsets.all(10),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(26),
-        child: Column(
+    );
+  }
+
+  Widget _heroContent(BuildContext context, {bool isCenter = false}) {
+    final align = isCenter ? CrossAxisAlignment.center : CrossAxisAlignment.start;
+    final textAlign = isCenter ? TextAlign.center : TextAlign.start;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: align,
+      children: [
+        // Trust Badge
+        _buildBadge()
+            .animate()
+            .fadeIn(duration: 600.ms)
+            .slideY(begin: 0.2, end: 0),
+        
+        const SizedBox(height: 24),
+        
+        // Massive Headline
+        Column(
+          crossAxisAlignment: align,
           children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: AppColors.gradientBox(),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Text(
+              "Trusting them so",
+              textAlign: textAlign,
+              style: TextStyle(
+                fontSize: 64,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+                letterSpacing: -1.5,
+                height: 1.0,
+              ),
+            ),
+            const GradientText(
+              "you don't have to.", 
+              fontSize: 64, 
+              fontWeight: FontWeight.w900,
+            ),
+          ],
+        )
+        .animate()
+        .fadeIn(delay: 200.ms, duration: 800.ms)
+        .slideY(begin: 0.1, end: 0),
+
+        const SizedBox(height: 24),
+        
+        // Subheadline
+        SizedBox(
+          width: 500,
+          child: Text(
+            "The most secure digital escrow for M-Pesa. Protect your payments, secure your sales, and trade with confidence—anywhere in Kenya.",
+            textAlign: textAlign,
+            style: TextStyle(
+              fontSize: 18,
+              color: AppColors.textSecondary,
+              height: 1.6,
+            ),
+          ),
+        )
+        .animate()
+        .fadeIn(delay: 500.ms, duration: 800.ms)
+        .slideY(begin: 0.1, end: 0),
+
+        const SizedBox(height: 40),
+        
+        // CTAs
+        Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          alignment: isCenter ? WrapAlignment.center : WrapAlignment.start,
+          children: [
+            PrimaryButton(
+              label: 'Get Started Free', 
+              icon: Icons.arrow_forward,
+              onTap: () {},
+            ),
+            _secondaryButton('Watch Demo', Icons.play_circle_outline),
+          ],
+        )
+        .animate()
+        .fadeIn(delay: 800.ms, duration: 800.ms)
+        .scale(begin: const Offset(0.9, 0.9), end: const Offset(1, 1)),
+
+        const SizedBox(height: 48),
+        
+        // Trust Signals
+        _buildTrustSignals(isCenter)
+            .animate()
+            .fadeIn(delay: 1100.ms),
+      ],
+    );
+  }
+
+  Widget _buildBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.success.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: AppColors.success.withOpacity(0.3)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.verified_user, size: 16, color: AppColors.success),
+          const SizedBox(width: 8),
+          Text(
+            "LICENSED BY CBK RAIL",
+            style: TextStyle(
+              color: AppColors.success,
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _secondaryButton(String label, IconData icon) {
+    return OutlinedButton.icon(
+      onPressed: () {},
+      icon: Icon(icon, size: 20),
+      label: Text(label),
+      style: OutlinedButton.styleFrom(
+        foregroundColor: Colors.white,
+        side: BorderSide(color: Colors.white.withOpacity(0.2)),
+        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
+  }
+
+  Widget _heroVisual() {
+    return Center(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Cyber Glow Background
+          Container(
+            width: 400,
+            height: 400,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.cyan.withOpacity(0.2),
+                  blurRadius: 100,
+                  spreadRadius: 20,
+                ),
+              ],
+            ),
+          ).animate(onPlay: (c) => c.repeat(reverse: true)).scale(duration: 4.seconds, begin: const Offset(0.8, 0.8), end: const Offset(1.2, 1.2)),
+          
+          // Floating Placeholder Card
+          Container(
+            width: 320,
+            height: 450,
+            decoration: AppColors.cyberCard(radius: 40),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: Column(
                 children: [
-                  Text('PesaCrow', style: TextStyle(color: Colors.white70, fontSize: 11)),
-                  SizedBox(height: 4),
-                  Text('Deal Secured ✓', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 17)),
-                  SizedBox(height: 2),
-                  Text('KSh 45,000', style: TextStyle(color: Colors.white70, fontSize: 13)),
+                  Container(
+                    height: 200,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [AppColors.surfaceLight, AppColors.surface],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                    child: Center(
+                      child: Icon(Icons.shield_outlined, size: 80, color: AppColors.cyan)
+                          .animate(onPlay: (c) => c.repeat())
+                          .shimmer(duration: 2.seconds, color: Colors.white24),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(height: 12, width: 100, decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(6))),
+                          const SizedBox(height: 12),
+                          Container(height: 12, width: 220, decoration: BoxDecoration(color: Colors.white12, borderRadius: BorderRadius.circular(6))),
+                          const SizedBox(height: 8),
+                          Container(height: 12, width: 180, decoration: BoxDecoration(color: Colors.white12, borderRadius: BorderRadius.circular(6))),
+                          const Spacer(),
+                          Container(
+                            height: 40,
+                            width: double.infinity,
+                            decoration: AppColors.gradientBox(radius: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-            Expanded(
-              child: Container(
-                color: Colors.white,
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    _mockupRow('Status', 'Funds in Escrow', AppColors.buyerGreen),
-                    const SizedBox(height: 10),
-                    _mockupRow('Buyer', 'Kevin O.', AppColors.dark),
-                    const SizedBox(height: 10),
-                    _mockupRow('Seller', 'Sarah M.', AppColors.dark),
-                    const Spacer(),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: AppColors.gradientBox(radius: 20),
-                      child: const Text(
-                        'Release Funds',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          )
+          .animate(onPlay: (c) => c.repeat(reverse: true))
+          .moveY(begin: -10, end: 10, duration: 3.seconds, curve: Curves.easeInOut),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTrustSignals(bool isCenter) {
+    return Column(
+      crossAxisAlignment: isCenter ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      children: [
+        Text(
+          "TRUSTED BY 10,000+ USERS ACROSS KENYA",
+          style: TextStyle(
+            color: AppColors.textMuted,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.5,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _trustLogo("SAFARICOM"),
+            _trustLogo("KRA"),
+            _trustLogo("CBK"),
           ],
+        ),
+      ],
+    );
+  }
+
+  Widget _trustLogo(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 32),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.white.withOpacity(0.2),
+          fontSize: 18,
+          fontWeight: FontWeight.w900,
+          fontStyle: FontStyle.italic,
         ),
       ),
     );
   }
 
-  Widget _mockupRow(String label, String value, Color valueColor) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF0FDFA),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: const TextStyle(color: AppColors.muted, fontSize: 10)),
-          const SizedBox(height: 2),
-          Text(value, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: valueColor)),
-        ],
-      ),
+  Widget _buildBackgroundDecor() {
+    return Stack(
+      children: [
+        Positioned(
+          top: -100,
+          right: -100,
+          child: Container(
+            width: 400,
+            height: 400,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.cyan.withOpacity(0.05),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 100,
+          left: 50,
+          child: Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.electricBlue.withOpacity(0.05),
+            ),
+          ),
+        ),
+      ],
     );
   }
+}
+
+extension on Widget {
+  // Simple helper to avoid repeated code for now
+  Widget get maxW => this;
 }
