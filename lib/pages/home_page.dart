@@ -13,6 +13,7 @@ import '../sections/hero_section.dart';
 import '../sections/why_section.dart';
 import '../sections/how_it_works_section.dart';
 import '../sections/features_section.dart';
+import '../sections/fee_calculator_section.dart';
 import '../sections/audience_section.dart';
 import '../sections/testimonials_section.dart';
 import '../sections/pricing_section.dart';
@@ -80,6 +81,7 @@ class _HomePageState extends State<HomePage> {
                     const WhySection(),
                     HowItWorksSection(key: _howItWorksKey),
                     FeaturesSection(key: _featuresKey),
+                    const FeeCalculatorSection(),
                     const AudienceSection(),
                     const TestimonialsSection(),
                     const SecuritySection(),
@@ -89,7 +91,9 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            _buildStickyAppBar(context),
+            Builder(
+              builder: (ctx) => _buildStickyAppBar(ctx),
+            ),
           ],
         ),
       ),
@@ -155,7 +159,7 @@ class _HomePageState extends State<HomePage> {
             const Spacer(),
             IconButton(
               icon: const Icon(Icons.menu, color: Colors.white),
-              onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+              onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           ],
         ],
@@ -237,6 +241,30 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  Widget _navBtn(String label, GlobalKey key) => TextButton(
+        onPressed: () => _scrollToSection(key),
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white70, 
+            fontSize: 14, 
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
+  
+  Widget _pageNavBtn(String label, Widget page) => TextButton(
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => page)),
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white70, 
+            fontSize: 14, 
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
 
   Widget _drawerItem(BuildContext context, IconData icon, String title, VoidCallback onTap) {
     return ListTile(
