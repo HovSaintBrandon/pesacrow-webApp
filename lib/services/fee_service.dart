@@ -12,7 +12,7 @@ class FeeService {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        if (data['status'] == 'success') {
+        if (data['success'] == true) {
           return data['data'];
         } else {
           throw Exception(data['message'] ?? 'Failed to calculate fees');
@@ -21,7 +21,7 @@ class FeeService {
         throw Exception('Server error: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Network error: $e');
+      rethrow;
     }
   }
 }
