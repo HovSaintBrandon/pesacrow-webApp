@@ -66,15 +66,7 @@ class HeroSection extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: align,
       children: [
-        // Trust Badge
-        _buildBadge()
-            .animate()
-            .fadeIn(duration: 600.ms)
-            .slideY(begin: 0.2, end: 0),
-        
-        const SizedBox(height: 24),
-        
-        // Massive Headline
+        // Trusting them... headline follows directly below
         Column(
           crossAxisAlignment: align,
           children: [
@@ -149,32 +141,7 @@ class HeroSection extends StatelessWidget {
     );
   }
 
-  Widget _buildBadge() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: AppColors.success.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: AppColors.success.withOpacity(0.3)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.verified_user, size: 16, color: AppColors.success),
-          const SizedBox(width: 8),
-          Text(
-            "TRUSTING THEM SO YOU DON'T HAVE TO",
-            style: TextStyle(
-              color: AppColors.success,
-              fontSize: 11,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  
 
   Widget _secondaryButton(String label, IconData icon) {
     return OutlinedButton.icon(
