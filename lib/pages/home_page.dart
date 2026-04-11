@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../widgets/gradient_text.dart';
 import '../widgets/primary_button.dart';
+import 'escrow_process_page.dart';
+import 'home_page.dart'; // Self-reference might be needed if moved but here it's fine
 import '../sections/hero_section.dart';
 import '../sections/why_section.dart';
 import '../sections/how_it_works_section.dart';
@@ -29,7 +32,6 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey _heroKey = GlobalKey();
   final GlobalKey _howItWorksKey = GlobalKey();
   final GlobalKey _featuresKey = GlobalKey();
-  final GlobalKey _pricingKey = GlobalKey();
 
   @override
   void initState() {
@@ -75,7 +77,6 @@ class _HomePageState extends State<HomePage> {
                     FeaturesSection(key: _featuresKey),
                     const AudienceSection(),
                     const TestimonialsSection(),
-                    PricingSection(key: _pricingKey),
                     const SecuritySection(),
                     const FinalCTASection(),
                     FooterSection(onLogoTap: () => _scrollToSection(_heroKey)),
@@ -124,23 +125,29 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          const Spacer(),
           if (isWide) ...[
-            _navBtn('Features', _featuresKey),
-            _navBtn('How It Works', _howItWorksKey),
-            _navBtn('Pricing', _pricingKey),
-            const SizedBox(width: 16),
+            const Spacer(),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _navBtn('Features', _featuresKey),
+                _navBtn('How It Works', _howItWorksKey),
+                _pageNavBtn('The Escrow Process', const EscrowProcessPage()),
+              ],
+            ),
+            const Spacer(),
             Animate(
               onPlay: (controller) => controller.repeat(reverse: true),
               effects: [
                 ScaleEffect(begin: const Offset(1, 1), end: const Offset(1.05, 1.05), duration: 2.seconds, curve: Curves.easeInOut),
               ],
               child: PrimaryButton(
-                label: 'Join PesaCrow Free', 
-                onTap: () {},
+                label: 'Join Beta Access', 
+                onTap: () => launchUrl(Uri.parse('https://docs.google.com/forms/d/e/1FAIpQLSeBbWMLBJmOuPQ3tbE14jR9o51EQfYUUAjpfnw6YJubXtwOiA/viewform?usp=dialog')),
               ),
             ),
           ] else ...[
+            const Spacer(),
             IconButton(
               icon: const Icon(Icons.menu, color: Colors.white),
               onPressed: () {}, // Drawer or mobile menu
@@ -153,6 +160,18 @@ class _HomePageState extends State<HomePage> {
 
   Widget _navBtn(String label, GlobalKey key) => TextButton(
         onPressed: () => _scrollToSection(key),
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white70, 
+            fontSize: 14, 
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
+  
+  Widget _pageNavBtn(String label, Widget page) => TextButton(
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => page)),
         child: Text(
           label,
           style: const TextStyle(

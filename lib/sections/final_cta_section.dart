@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 
 class FinalCTASection extends StatelessWidget {
@@ -54,13 +55,14 @@ class FinalCTASection extends StatelessWidget {
               alignment: WrapAlignment.center,
               children: [
                 _buildCTAButton(
-                  'Join PesaCrow For Free',
+                  'Join Beta Access',
                   Icons.rocket_launch,
                   true,
+                  onTap: () => launchUrl(Uri.parse('https://docs.google.com/forms/d/e/1FAIpQLSeBbWMLBJmOuPQ3tbE14jR9o51EQfYUUAjpfnw6YJubXtwOiA/viewform?usp=dialog')),
                 ),
                 _buildCTAButton(
                   'Download the App',
-                  Icons.apple,
+                  Icons.android, 
                   false,
                 ),
               ],
@@ -71,38 +73,41 @@ class FinalCTASection extends StatelessWidget {
     );
   }
 
-  Widget _buildCTAButton(String label, IconData icon, bool primary) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-        decoration: BoxDecoration(
-          color: primary ? AppColors.cyan : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
-          border: primary ? null : Border.all(color: Colors.white.withOpacity(0.2)),
-          boxShadow: primary ? [
-            BoxShadow(
-              color: AppColors.cyan.withOpacity(0.4),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            )
-          ] : null,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: primary ? Colors.black : Colors.white, size: 20),
-            const SizedBox(width: 12),
-            Text(
-              label,
-              style: TextStyle(
-                color: primary ? Colors.black : Colors.white,
-                fontWeight: FontWeight.w800,
-                fontSize: 16,
+  Widget _buildCTAButton(String label, IconData icon, bool primary, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          decoration: BoxDecoration(
+            color: primary ? AppColors.cyan : Colors.transparent,
+            borderRadius: BorderRadius.circular(16),
+            border: primary ? null : Border.all(color: Colors.white.withOpacity(0.2)),
+            boxShadow: primary ? [
+              BoxShadow(
+                color: AppColors.cyan.withOpacity(0.4),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              )
+            ] : null,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, color: primary ? Colors.black : Colors.white, size: 20),
+              const SizedBox(width: 12),
+              Text(
+                label,
+                style: TextStyle(
+                  color: primary ? Colors.black : Colors.white,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

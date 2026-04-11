@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../widgets/gradient_text.dart';
 import '../widgets/primary_button.dart';
@@ -127,9 +128,9 @@ class HeroSection extends StatelessWidget {
           alignment: isCenter ? WrapAlignment.center : WrapAlignment.start,
           children: [
             PrimaryButton(
-              label: 'Get Started Free', 
+              label: 'Join Beta Access', 
               icon: Icons.arrow_forward,
-              onTap: () {},
+              onTap: () => launchUrl(Uri.parse('https://docs.google.com/forms/d/e/1FAIpQLSeBbWMLBJmOuPQ3tbE14jR9o51EQfYUUAjpfnw6YJubXtwOiA/viewform?usp=dialog')),
             ),
             _secondaryButton('Watch Demo', Icons.play_circle_outline),
           ],
@@ -162,7 +163,7 @@ class HeroSection extends StatelessWidget {
           Icon(Icons.verified_user, size: 16, color: AppColors.success),
           const SizedBox(width: 8),
           Text(
-            "LICENSED BY CBK RAIL",
+            "TRUSTING THEM SO YOU DON'T HAVE TO",
             style: TextStyle(
               color: AppColors.success,
               fontSize: 11,
@@ -284,9 +285,11 @@ class HeroSection extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _trustLogo("SAFARICOM"),
-            _trustLogo("KRA"),
-            _trustLogo("CBK"),
+            _trustLogo("Absolute"),
+            _trustLogo("Advanced"),
+            _trustLogo("Anonymous"),
+            _trustLogo("Service"),
+            
           ],
         ),
       ],

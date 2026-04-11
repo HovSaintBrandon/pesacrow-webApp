@@ -4,6 +4,10 @@ import '../theme/app_colors.dart';
 import '../pages/faq_page.dart';
 import '../pages/terms_page.dart';
 import '../pages/privacy_page.dart';
+import '../pages/escrow_process_page.dart';
+import '../pages/business_page.dart';
+import '../pages/api_page.dart';
+import '../pages/about_page.dart';
 
 class FooterSection extends StatelessWidget {
   final VoidCallback? onLogoTap;
@@ -12,7 +16,7 @@ class FooterSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final columns = {
-      'Products': ['Personal', 'Business', 'API'],
+      'Products': [ 'Business', 'API'],
       'How It Works': ['The Escrow Process', 'FAQ'],
       'Company': ['About Us', 'Careers', 'Contact'],
       'Legal': ['Terms of Service', 'Privacy Policy'],
@@ -112,7 +116,7 @@ class FooterSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          'support@pesacrow.top\n+254 7XX XXX XXX',
+          'support@pesacrow.top',
           style: TextStyle(
             color: AppColors.textMuted, 
             fontSize: 13,
@@ -172,6 +176,26 @@ class FooterSection extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const PrivacyPage()),
+      );
+    } else if (link == 'The Escrow Process') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const EscrowProcessPage()),
+      );
+    } else if (link == 'Business') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const BusinessPage()),
+      );
+    } else if (link == 'API') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const APIPage()),
+      );
+    } else if (link == 'About Us') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const AboutPage()),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
