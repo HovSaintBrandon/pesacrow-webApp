@@ -22,7 +22,7 @@ class HeroSection extends StatelessWidget {
           center: const Alignment(0.8, -0.6),
           radius: 1.2,
           colors: [
-            AppColors.cyan.withOpacity(0.08),
+            AppColors.brandGreen.withOpacity(0.1),
             AppColors.background,
           ],
         ),
@@ -247,7 +247,7 @@ class HeroSection extends StatelessWidget {
             height: 400,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.cyan.withOpacity(0.05),
+              color: AppColors.brandGreen.withOpacity(0.06),
             ),
           ),
         ),
@@ -259,7 +259,7 @@ class HeroSection extends StatelessWidget {
             height: 200,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.electricBlue.withOpacity(0.05),
+              color: AppColors.brandBlue.withOpacity(0.06),
             ),
           ),
         ),

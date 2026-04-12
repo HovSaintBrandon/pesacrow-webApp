@@ -7,13 +7,14 @@ class AppTheme {
       fontFamily: 'Inter',
       scaffoldBackgroundColor: AppColors.background,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.electricBlue,
-        primary: AppColors.cyan,
-        secondary: AppColors.electricBlue,
+        seedColor: AppColors.brandGreen,
+        primary: AppColors.brandGreen,
+        secondary: AppColors.brandBlue,
+        tertiary: AppColors.teal,
         surface: AppColors.surface,
         onSurface: Colors.white,
         error: AppColors.error,
-        onPrimary: Colors.black,
+        onPrimary: Colors.white,
         onSecondary: Colors.white,
       ),
       textTheme: const TextTheme(

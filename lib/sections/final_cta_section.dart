@@ -17,10 +17,10 @@ class FinalCTASection extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(40),
-          border: Border.all(color: AppColors.cyan.withOpacity(0.2)),
+          border: Border.all(color: AppColors.teal.withOpacity(0.2)),
           boxShadow: [
             BoxShadow(
-              color: AppColors.cyan.withOpacity(0.05),
+              color: AppColors.brandGreen.withOpacity(0.05),
               blurRadius: 100,
               spreadRadius: 10,
             ),
@@ -76,7 +76,7 @@ class FinalCTASection extends StatelessWidget {
             ).animate(delay: 400.ms).fadeIn().scale(),
           ],
         ),
-      ).animate().shimmer(delay: 2.seconds, duration: 2.seconds, color: AppColors.cyan.withOpacity(0.1)),
+      ).animate().shimmer(delay: 2.seconds, duration: 2.seconds, color: AppColors.teal.withOpacity(0.1)),
     );
   }
 
@@ -89,12 +89,12 @@ class FinalCTASection extends StatelessWidget {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
           decoration: BoxDecoration(
-            color: primary ? AppColors.cyan : Colors.transparent,
+            color: primary ? AppColors.brandGreen : Colors.transparent,
             borderRadius: BorderRadius.circular(16),
             border: primary ? null : Border.all(color: Colors.white.withOpacity(0.2)),
             boxShadow: primary ? [
               BoxShadow(
-                color: AppColors.cyan.withOpacity(0.4),
+                color: AppColors.brandGreen.withOpacity(0.4),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               )
@@ -103,12 +103,12 @@ class FinalCTASection extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, color: primary ? Colors.black : Colors.white, size: 20),
+              Icon(icon, color: Colors.white, size: 20),
               const SizedBox(width: 12),
               Text(
                 label,
-                style: TextStyle(
-                  color: primary ? Colors.black : Colors.white,
+                style: const TextStyle(
+                  color: Colors.white,
                   fontWeight: FontWeight.w800,
                   fontSize: 16,
                 ),
