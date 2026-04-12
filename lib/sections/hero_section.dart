@@ -120,11 +120,12 @@ class HeroSection extends StatelessWidget {
           alignment: isCenter ? WrapAlignment.center : WrapAlignment.start,
           children: [
             PrimaryButton(
-              label: 'Join Beta Access', 
-              icon: Icons.arrow_forward,
-              onTap: () => launchUrl(Uri.parse('https://docs.google.com/forms/d/e/1FAIpQLSeBbWMLBJmOuPQ3tbE14jR9o51EQfYUUAjpfnw6YJubXtwOiA/viewform?usp=dialog')),
+              label: 'Transact Online', 
+              icon: Icons.language,
+              onTap: () => launchUrl(Uri.parse('https://app.pesacrow.top/#/')),
             ),
-            _secondaryButton('Watch Demo', Icons.play_circle_outline),
+            _secondaryButton('Download App', Icons.android, onTap: () => launchUrl(Uri.parse('https://github.com/HovSaintBrandon/PesaCrow-Privacy-Policy/releases/download/VERSION1/app-release.apk'))),
+            _secondaryButton('Join Beta', Icons.rocket_launch, onTap: () => launchUrl(Uri.parse('https://docs.google.com/forms/d/e/1FAIpQLSeBbWMLBJmOuPQ3tbE14jR9o51EQfYUUAjpfnw6YJubXtwOiA/viewform?usp=dialog'))),
           ],
         )
         .animate()
@@ -143,9 +144,9 @@ class HeroSection extends StatelessWidget {
 
   
 
-  Widget _secondaryButton(String label, IconData icon) {
+  Widget _secondaryButton(String label, IconData icon, {VoidCallback? onTap}) {
     return OutlinedButton.icon(
-      onPressed: () {},
+      onPressed: onTap ?? () {},
       icon: Icon(icon, size: 20),
       label: Text(label),
       style: OutlinedButton.styleFrom(
@@ -178,58 +179,15 @@ class HeroSection extends StatelessWidget {
             ),
           ).animate(onPlay: (c) => c.repeat(reverse: true)).scale(duration: 4.seconds, begin: const Offset(0.8, 0.8), end: const Offset(1.2, 1.2)),
           
-          // Floating Placeholder Card
-          Container(
-            width: 320,
-            height: 450,
-            decoration: AppColors.cyberCard(radius: 40),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(40),
-              child: Column(
-                children: [
-                  Container(
-                    height: 200,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [AppColors.surfaceLight, AppColors.surface],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
-                    ),
-                    child: Center(
-                      child: Icon(Icons.shield_outlined, size: 80, color: AppColors.cyan)
-                          .animate(onPlay: (c) => c.repeat())
-                          .shimmer(duration: 2.seconds, color: Colors.white24),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(height: 12, width: 100, decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(6))),
-                          const SizedBox(height: 12),
-                          Container(height: 12, width: 220, decoration: BoxDecoration(color: Colors.white12, borderRadius: BorderRadius.circular(6))),
-                          const SizedBox(height: 8),
-                          Container(height: 12, width: 180, decoration: BoxDecoration(color: Colors.white12, borderRadius: BorderRadius.circular(6))),
-                          const Spacer(),
-                          Container(
-                            height: 40,
-                            width: double.infinity,
-                            decoration: AppColors.gradientBox(radius: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          // Floating Splash Logo
+          Image.asset(
+            'assets/splashlogo.png',
+            width: 350,
+            fit: BoxFit.contain,
           )
           .animate(onPlay: (c) => c.repeat(reverse: true))
-          .moveY(begin: -10, end: 10, duration: 3.seconds, curve: Curves.easeInOut),
+          .moveY(begin: -15, end: 15, duration: 4.seconds, curve: Curves.easeInOut)
+          .shimmer(delay: 2.seconds, duration: 2.seconds, color: Colors.white10),
         ],
       ),
     );

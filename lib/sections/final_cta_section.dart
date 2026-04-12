@@ -55,15 +55,22 @@ class FinalCTASection extends StatelessWidget {
               alignment: WrapAlignment.center,
               children: [
                 _buildCTAButton(
-                  'Join Beta Access',
-                  Icons.rocket_launch,
+                  'Transact Online',
+                  Icons.language,
                   true,
-                  onTap: () => launchUrl(Uri.parse('https://docs.google.com/forms/d/e/1FAIpQLSeBbWMLBJmOuPQ3tbE14jR9o51EQfYUUAjpfnw6YJubXtwOiA/viewform?usp=dialog')),
+                  onTap: () => launchUrl(Uri.parse('https://app.pesacrow.top/#/')),
                 ),
                 _buildCTAButton(
                   'Download the App',
                   Icons.android, 
                   false,
+                  onTap: () => launchUrl(Uri.parse('https://github.com/HovSaintBrandon/PesaCrow-Privacy-Policy/releases/download/VERSION1/app-release.apk')),
+                ),
+                _buildCTAButton(
+                  'Join Beta Access',
+                  Icons.rocket_launch,
+                  false,
+                  onTap: () => launchUrl(Uri.parse('https://docs.google.com/forms/d/e/1FAIpQLSeBbWMLBJmOuPQ3tbE14jR9o51EQfYUUAjpfnw6YJubXtwOiA/viewform?usp=dialog')),
                 ),
               ],
             ).animate(delay: 400.ms).fadeIn().scale(),

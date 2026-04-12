@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _navBtn('Features', _featuresKey),
+                _pageNavBtn('About', const AboutPage()),
                 _navBtn('How It Works', _howItWorksKey),
                 _pageNavBtn('The Escrow Process', const EscrowProcessPage()),
               ],
@@ -151,8 +151,8 @@ class _HomePageState extends State<HomePage> {
                 ScaleEffect(begin: const Offset(1, 1), end: const Offset(1.05, 1.05), duration: 2.seconds, curve: Curves.easeInOut),
               ],
               child: PrimaryButton(
-                label: 'Join Beta Access', 
-                onTap: () => launchUrl(Uri.parse('https://docs.google.com/forms/d/e/1FAIpQLSeBbWMLBJmOuPQ3tbE14jR9o51EQfYUUAjpfnw6YJubXtwOiA/viewform?usp=dialog')),
+                label: 'Transact Online', 
+                onTap: () => launchUrl(Uri.parse('https://app.pesacrow.top/#/')),
               ),
             ),
           ] else ...[
@@ -195,10 +195,7 @@ class _HomePageState extends State<HomePage> {
               child: ListView(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 children: [
-                  _drawerItem(context, Icons.star_outline, 'Features', () {
-                    Navigator.pop(context);
-                    _scrollToSection(_featuresKey);
-                  }),
+
                   _drawerItem(context, Icons.help_outline, 'How It Works', () {
                     Navigator.pop(context);
                     _scrollToSection(_howItWorksKey);
@@ -229,10 +226,10 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.all(24),
               child: PrimaryButton(
-                label: 'Join Beta Access',
+                label: 'Transact Online',
                 onTap: () {
                   Navigator.pop(context);
-                  launchUrl(Uri.parse('https://docs.google.com/forms/d/e/1FAIpQLSeBbWMLBJmOuPQ3tbE14jR9o51EQfYUUAjpfnw6YJubXtwOiA/viewform?usp=dialog'));
+                  launchUrl(Uri.parse('https://app.pesacrow.top/#/'));
                 },
               ),
             ),
@@ -285,6 +282,7 @@ class _HomePageState extends State<HomePage> {
         context,
         duration: const Duration(milliseconds: 800),
         curve: Curves.easeInOutCubic,
+        alignment: 0.0,
       );
     }
   }
