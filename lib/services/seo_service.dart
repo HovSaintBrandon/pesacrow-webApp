@@ -16,8 +16,7 @@ class SeoService {
       // Update Title
       meta.author(author: 'PesaCrow');
       
-      // Dynamic Title and Description
-      meta.title(title: title);
+      // Dynamic Description
       meta.description(description: description);
       
       if (keywords != null && keywords.isNotEmpty) {
@@ -28,8 +27,10 @@ class SeoService {
       meta.ogTitle(ogTitle: ogTitle ?? title);
       meta.ogDescription(ogDescription: ogDescription ?? description);
       meta.ogImage(ogImage: ogImage ?? 'https://escrow.pesacrow.top/favicon.png');
-      meta.ogType(ogType: 'website');
-      meta.ogUrl(ogUrl: 'https://escrow.pesacrow.top/');
+      
+      // Property Content for OG tags not explicitly in methods
+      meta.propertyContent(property: 'og:type', content: 'website');
+      meta.propertyContent(property: 'og:url', content: 'https://escrow.pesacrow.top/');
       
       // Twitter Card
       meta.twitterCard(twitterCard: TwitterCard.summaryLargeImage);

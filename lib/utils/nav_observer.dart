@@ -10,7 +10,7 @@ class SeoNavObserver extends NavigatorObserver {
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    super.didPop(route);
+    super.didPop(route, previousRoute);
     if (previousRoute != null) {
       _updateSeo(previousRoute);
     }
