@@ -139,9 +139,9 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _pageNavBtn('About', const AboutPage()),
+                _navBtn('About', '/about'),
                 _navBtn('How It Works', _howItWorksKey),
-                _pageNavBtn('The Escrow Process', const EscrowProcessPage()),
+                _navBtn('The Escrow Process', '/escrow-process'),
               ],
             ),
             const Spacer(),
@@ -202,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                   }),
                   _drawerItem(context, Icons.account_tree_outlined, 'The Escrow Process', () {
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const EscrowProcessPage()));
+                    Navigator.pushNamed(context, '/escrow-process');
                   }),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -210,15 +210,15 @@ class _HomePageState extends State<HomePage> {
                   ),
                   _drawerItem(context, Icons.business_center_outlined, 'Business', () {
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const BusinessPage()));
+                    Navigator.pushNamed(context, '/business');
                   }),
                   _drawerItem(context, Icons.code, 'API', () {
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const APIPage()));
+                    Navigator.pushNamed(context, '/api');
                   }),
                   _drawerItem(context, Icons.info_outline, 'About Us', () {
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const AboutPage()));
+                    Navigator.pushNamed(context, '/about');
                   }),
                 ],
               ),
@@ -239,8 +239,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _navBtn(String label, GlobalKey key) => TextButton(
-        onPressed: () => _scrollToSection(key),
+  Widget _navBtn(String label, dynamic target) => TextButton(
+        onPressed: () {
+          if (target is GlobalKey) {
+            _scrollToSection(target);
+          } else if (target is String) {
+            Navigator.pushNamed(context, target);
+          }
+        },
         child: Text(
           label,
           style: const TextStyle(
@@ -250,18 +256,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       );
-  
-  Widget _pageNavBtn(String label, Widget page) => TextButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => page)),
-        child: Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white70, 
-            fontSize: 14, 
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      );
+
+  // _pageNavBtn is deprecated in favor of _navBtn with route names
 
   Widget _drawerItem(BuildContext context, IconData icon, String title, VoidCallback onTap) {
     return ListTile(

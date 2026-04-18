@@ -163,40 +163,19 @@ class FooterSection extends StatelessWidget {
 
   void _handleLinkClick(BuildContext context, String link) {
     if (link == 'FAQ') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const FAQPage()),
-      );
+      Navigator.pushNamed(context, '/faq');
     } else if (link == 'Terms of Service') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const TermsPage()),
-      );
+      Navigator.pushNamed(context, '/terms');
     } else if (link == 'Privacy Policy') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const PrivacyPage()),
-      );
+      Navigator.pushNamed(context, '/privacy');
     } else if (link == 'The Escrow Process') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const EscrowProcessPage()),
-      );
+      Navigator.pushNamed(context, '/escrow-process');
     } else if (link == 'Business') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const BusinessPage()),
-      );
+      Navigator.pushNamed(context, '/business');
     } else if (link == 'API') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const APIPage()),
-      );
+      Navigator.pushNamed(context, '/api');
     } else if (link == 'About Us') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const AboutPage()),
-      );
+      Navigator.pushNamed(context, '/about');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
