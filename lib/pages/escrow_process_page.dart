@@ -67,15 +67,7 @@ class EscrowProcessPage extends StatelessWidget {
                   
                   const SizedBox(height: 100),
                   
-                  // Footer Spacer/Call to action
-                  Center(
-                    child: Text(
-                      "Trusted by thousands of Kenyans for secure peer-to-peer trade.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: AppColors.cyan.withOpacity(0.6), fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),

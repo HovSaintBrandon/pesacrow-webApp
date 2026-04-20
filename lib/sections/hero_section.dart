@@ -134,10 +134,6 @@ class HeroSection extends StatelessWidget {
 
         const SizedBox(height: 48),
         
-        // Trust Signals
-        _buildTrustSignals(isCenter)
-            .animate()
-            .fadeIn(delay: 1100.ms),
       ],
     );
   }
@@ -193,48 +189,6 @@ class HeroSection extends StatelessWidget {
     );
   }
 
-  Widget _buildTrustSignals(bool isCenter) {
-    return Column(
-      crossAxisAlignment: isCenter ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-      children: [
-        Text(
-          "TRUSTED BY 10,000+ USERS ACROSS KENYA",
-          style: TextStyle(
-            color: AppColors.textMuted,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.5,
-          ),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _trustLogo("Absolute"),
-            _trustLogo("Advanced"),
-            _trustLogo("Anonymous"),
-            _trustLogo("Service"),
-            
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _trustLogo(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 32),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Colors.white.withOpacity(0.2),
-          fontSize: 18,
-          fontWeight: FontWeight.w900,
-          fontStyle: FontStyle.italic,
-        ),
-      ),
-    );
-  }
 
   Widget _buildBackgroundDecor() {
     return Stack(
