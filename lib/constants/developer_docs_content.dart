@@ -57,6 +57,15 @@ You must register as a Platform Partner to obtain your credentials:
 1.  **API Key (`apiKey`)**: Passed via the `x-api-key` header for all requests. Prefix: `pk_`.
 2.  **API Secret (`apiSecret`)**: Used strictly to verify incoming webhooks. Prefix: `sk_`. Never expose this in frontend code.
 
+## 🔑 Your Sandbox Credentials
+Use these for all server-to-server calls (Shopify, WooCommerce, etc.) in your development environment:
+
+| Field | Sandbox Value |
+| :--- | :--- |
+| **API Key (x-api-key)** | `pk_sandbox_6f52968378942b8e` |
+| **API Secret** | `sk_sandbox_a928475261039485` |
+| **Default Test Seller** | `254700000000` |
+
 ## Critical Technical Requirements
 To integrate successfully, your tech team must implement the following:
 *   **Idempotency Keys**: Network drops happen. To prevent a buyer from being charged twice if your server retries a request, you must pass a unique `Idempotency-Key` header when creating deals.
