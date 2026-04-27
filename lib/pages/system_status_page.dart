@@ -16,11 +16,24 @@ class SystemStatusPage extends StatefulWidget {
 class _SystemStatusPageState extends State<SystemStatusPage> {
   late Future<Map<String, dynamic>> _statusFuture;
 
+  String _selectedCategory = systemStatusDocs.keys.first;
+  String _selectedTopic = systemStatusDocs.values.first.keys.first;
+
   @override
   void initState() {
     super.initState();
     _statusFuture = _fetchSystemStatus();
   }
+
+  void _selectTopic(String category, String topic) {
+    setState(() {
+      _selectedCategory = category;
+      _selectedTopic = topic;
+    });
+  }
+
+  // ... (Keep existing fetch and dashboard methods)
+  // Re-injecting the rest of the file exactly down to build
 
   Future<Map<String, dynamic>> _fetchSystemStatus() async {
     try {
@@ -31,7 +44,6 @@ class _SystemStatusPageState extends State<SystemStatusPage> {
         throw Exception('Failed to load system status');
       }
     } catch (e) {
-      // In case of error (e.g. CORS during dev or offline), return a fallback map
       return {
         'status': 'degraded',
         'timestamp': DateTime.now().toIso8601String(),
@@ -297,18 +309,148 @@ class _SystemStatusPageState extends State<SystemStatusPage> {
     );
   }
 
+  Widget _buildSidebar() {
+    return ListView(
+      padding: const EdgeInsets.symmetric(vertical: 24),
+      children: systemStatusDocs.entries.map((categoryEntry) {
+        final category = categoryEntry.key;
+        final topics = categoryEntry.value;
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                child: Text(
+                  category.toUpperCase(),
+                  style: const TextStyle(
+                    color: AppColors.textMuted,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ),
+              ...topics.keys.map((topic) {
+                final isSelected = category == _selectedCategory && topic == _selectedTopic;
+                return InkWell(
+                  onTap: () {
+                    _selectTopic(category, topic);
+                    if (Scaffold.of(context).isDrawerOpen) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: isSelected ? AppColors.cyan.withOpacity(0.1) : Colors.transparent,
+                      border: Border(
+                        left: BorderSide(
+                          color: isSelected ? AppColors.cyan : Colors.transparent,
+                          width: 3,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      topic,
+                      style: TextStyle(
+                        color: isSelected ? AppColors.cyan : AppColors.textSecondary,
+                        fontSize: 15,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildMainContent() {
+    if (_selectedTopic == 'Live API Status') {
+      return SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 48),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 800),
+            child: _buildLiveDashboard(),
+          ),
+        ),
+      );
+    }
+
+    final markdownData = systemStatusDocs[_selectedCategory]![_selectedTopic]!;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 48),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: MarkdownBody(
+            data: markdownData,
+            selectable: true,
+            styleSheet: MarkdownStyleSheet(
+              h1: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.w800, height: 1.3),
+              h2: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700, height: 1.5),
+              h3: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600, height: 1.5),
+              p: const TextStyle(color: AppColors.textSecondary, fontSize: 16, height: 1.7),
+              listBullet: const TextStyle(color: AppColors.textSecondary, fontSize: 16),
+              code: TextStyle(
+                color: AppColors.orange,
+                backgroundColor: Colors.white.withOpacity(0.05),
+                fontFamily: 'monospace',
+                fontSize: 14,
+              ),
+              codeblockDecoration: BoxDecoration(
+                color: const Color(0xFF1E1E1E),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.white.withOpacity(0.1)),
+              ),
+              blockquoteDecoration: BoxDecoration(
+                border: const Border(left: BorderSide(color: AppColors.cyan, width: 4)),
+                color: AppColors.cyan.withOpacity(0.05),
+              ),
+              tableBorder: TableBorder.all(color: Colors.white.withOpacity(0.1), width: 1),
+              tableHead: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              tableBody: const TextStyle(color: AppColors.textSecondary),
+              horizontalRuleDecoration: BoxDecoration(
+                border: Border(top: BorderSide(color: Colors.white.withOpacity(0.1), width: 1)),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDesktop = MediaQuery.of(context).size.width > 900;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.surface,
         elevation: 1,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const GradientText('System Status & Incident Management', fontSize: 20, fontWeight: FontWeight.bold),
+        titleSpacing: isDesktop ? 24 : NavigationToolbar.kMiddleSpacing,
+        leading: !isDesktop 
+          ? Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(Icons.menu, color: Colors.white),
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              ),
+            )
+          : IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Navigator.pop(context),
+            ),
+        title: const GradientText('System Status & Incidents', fontSize: 20, fontWeight: FontWeight.bold),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh, color: AppColors.cyan),
@@ -319,55 +461,29 @@ class _SystemStatusPageState extends State<SystemStatusPage> {
               });
             },
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 24),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 800),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildLiveDashboard(),
-                MarkdownBody(
-                  data: statusManagementMarkdown,
-                  selectable: true,
-                  styleSheet: MarkdownStyleSheet(
-                    h1: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold, height: 1.5),
-                    h2: const TextStyle(color: AppColors.cyan, fontSize: 24, fontWeight: FontWeight.w600, height: 1.4),
-                    h3: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600, height: 1.3),
-                    p: const TextStyle(color: AppColors.textSecondary, fontSize: 16, height: 1.6),
-                    listBullet: const TextStyle(color: AppColors.cyan, fontSize: 16),
-                    code: TextStyle(
-                      color: AppColors.orange,
-                      backgroundColor: Colors.white.withOpacity(0.05),
-                      fontFamily: 'monospace',
-                      fontSize: 14,
-                    ),
-                    codeblockDecoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.white.withOpacity(0.1)),
-                    ),
-                    blockquoteDecoration: BoxDecoration(
-                      border: Border(left: BorderSide(color: AppColors.cyan, width: 4)),
-                      color: AppColors.surface.withOpacity(0.5),
-                    ),
-                    tableBorder: TableBorder.all(color: Colors.white.withOpacity(0.1), width: 1),
-                    tableHead: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                    tableBody: const TextStyle(color: AppColors.textSecondary),
-                    horizontalRuleDecoration: BoxDecoration(
-                      border: Border(top: BorderSide(color: Colors.white.withOpacity(0.1), width: 1)),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 64),
-              ],
+      drawer: isDesktop ? null : Drawer(
+        backgroundColor: AppColors.surface,
+        child: _buildSidebar(),
+      ),
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (isDesktop)
+            Container(
+              width: 280,
+              decoration: BoxDecoration(
+                color: AppColors.surface.withOpacity(0.5),
+                border: Border(right: BorderSide(color: Colors.white.withOpacity(0.05))),
+              ),
+              child: _buildSidebar(),
             ),
+          Expanded(
+            child: _buildMainContent(),
           ),
-        ),
+        ],
       ),
     );
   }

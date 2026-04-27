@@ -1,11 +1,8 @@
-const String statusManagementMarkdown = r'''
-# PesaCrow System Status & Incident Management
-
-Reliability is critical when handling financial transactions. While PesaCrow is built on highly resilient infrastructure, we are uniquely dependent on external telecom networks—specifically Safaricom's M-Pesa APIs. 
-
-This guide explains how to monitor our system status, understand degraded performance, and handle incidents gracefully in your application.
-
-## 1. Monitoring the Status Page
+final Map<String, Map<String, String>> systemStatusDocs = {
+  'Status & Monitoring': {
+    'Live API Status': '', // This is a special key that will render the live dashboard widget
+    'Monitoring the Status Page': '''
+# Monitoring the Status Page
 
 The source of truth for all operational metrics is our public status page:
 **🔗 [status.pesacrow.top](https://status.pesacrow.top)**
@@ -18,12 +15,13 @@ Our status page tracks the health of several core components:
 *   **M-Pesa B2C (Payouts/Refunds)**: Safaricom's ability to deposit funds into your merchant account or refund buyers.
 *   **Webhook Dispatcher**: Our internal queue that sends `POST` requests to your servers when a deal is paid.
 *   **SMS Gateway (Africa's Talking)**: The system that notifies buyers to approve delivery.
+''',
+  },
+  'External Dependencies': {
+    'M-Pesa Outages': '''
+# Understanding M-Pesa Dependencies
 
----
-
-## 2. Understanding M-Pesa Dependencies
-
-PesaCrow abstract away much of the complexity of M-Pesa, but we cannot prevent Safaricom maintenance windows. Here is how specific external outages affect your integration:
+PesaCrow abstracts away much of the complexity of M-Pesa, but we cannot prevent Safaricom maintenance windows. Here is how specific external outages affect your integration:
 
 ### Scenario A: M-Pesa STK Push is Down
 *   **What happens**: Buyers check out, but their phones never receive the prompt to enter their PIN.
@@ -39,10 +37,11 @@ PesaCrow abstract away much of the complexity of M-Pesa, but we cannot prevent S
 *   **What happens**: The buyer enters their PIN and money is deducted, but your system doesn't immediately receive the PesaCrow webhook.
 *   **What PesaCrow does**: We are waiting for Safaricom to confirm the payment to us. As soon as they do, we immediately fire the webhook to you.
 *   **What you should do**: Ensure your frontend UI has a manual "I have paid, check status" button that polls our public `GET /open/deals/{transactionId}` endpoint. Do not fulfill orders until the webhook fires or the endpoint returns `status: "held"`.
-
----
-
-## 3. Best Practices for Incident Handling
+''',
+  },
+  'Incident Response': {
+    'Best Practices': '''
+# Best Practices for Incident Handling
 
 To ensure your customers don't lose trust during an outage, implement these engineering best practices:
 
@@ -63,13 +62,14 @@ if (order.paymentStatus === 'paid') {
     return res.status(200).send('Already processed');
 }
 ```
-
----
-
-## 4. Maintenance Windows
+''',
+    'Maintenance Windows': '''
+# Maintenance Windows
 
 *   **PesaCrow Maintenance**: We aim for zero-downtime deployments. Major upgrades are performed on Sundays between 02:00 AM and 04:00 AM (EAT). We will notify all registered developers via email 7 days in advance if downtime is expected.
 *   **Safaricom Maintenance**: Safaricom frequently performs maintenance on weekends late at night. PesaCrow has no control over these windows, but we will reflect them on `status.pesacrow.top` as soon as Safaricom announces them.
 
 *For critical incidents affecting your ability to process payments, please check the status page first. If all systems show as operational but you are experiencing total failure, escalate immediately to emergency-dev@pesacrow.top.*
-''';
+''',
+  }
+};
