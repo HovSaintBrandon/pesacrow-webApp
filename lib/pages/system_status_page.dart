@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import '../theme/app_colors.dart';
 import '../widgets/gradient_text.dart';
-import '../constants/developer_guide.dart';
+import '../constants/status_management.dart';
 
-class APIPage extends StatelessWidget {
-  const APIPage({super.key});
+class SystemStatusPage extends StatelessWidget {
+  const SystemStatusPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,24 +18,13 @@ class APIPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const GradientText('PesaCrow Developer Hub', fontSize: 20, fontWeight: FontWeight.bold),
-        actions: [
-          TextButton.icon(
-            onPressed: () => Navigator.pushNamed(context, '/system-status'),
-            icon: const Icon(Icons.monitor_heart, color: AppColors.cyan, size: 18),
-            label: const Text(
-              'System Status',
-              style: TextStyle(color: AppColors.cyan, fontWeight: FontWeight.w600),
-            ),
-          ),
-          const SizedBox(width: 16),
-        ],
+        title: const GradientText('System Status & Incident Management', fontSize: 20, fontWeight: FontWeight.bold),
       ),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 800),
           child: Markdown(
-            data: developerGuideMarkdown,
+            data: statusManagementMarkdown,
             selectable: true,
             styleSheet: MarkdownStyleSheet(
               h1: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold, height: 1.5),

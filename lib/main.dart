@@ -10,6 +10,7 @@ import 'pages/escrow_process_page.dart';
 import 'pages/faq_page.dart';
 import 'pages/privacy_page.dart';
 import 'pages/terms_page.dart';
+import 'pages/system_status_page.dart';
 import 'services/seo_service.dart';
 import 'utils/nav_observer.dart';
 
@@ -44,6 +45,7 @@ class PesaCrowApp extends StatelessWidget {
         '/faq': (context) => const FAQPage(),
         '/privacy': (context) => const PrivacyPage(),
         '/terms': (context) => const TermsPage(),
+        '/system-status': (context) => const SystemStatusPage(),
       },
       navigatorObservers: [
         SeoNavObserver(),
